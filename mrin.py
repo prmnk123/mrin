@@ -496,10 +496,10 @@ def remove_user(message):
         response = f"➖ *𝗨𝘀𝗲𝗿 {target_user_id} 𝗶𝘀 𝗻𝗼𝘁 𝗶𝗻 𝘁𝗵𝗲 𝗮𝘂𝘁𝗵𝗼𝗿𝗶𝘇𝗲𝗱 𝘂𝘀𝗲𝗿𝘀 𝗹𝗶𝘀𝘁*"
 
     bot.reply_to(message, response, parse_mode='Markdown')
-    
+
 @bot.message_handler(commands=['resellers'])
 def show_resellers(message):
-    # Check if the user is an admin before displaying resellers' information
+    # Ensure admin_id is a list or set
     user_id = str(message.chat.id)
 
     if user_id not in admin_id:
@@ -508,30 +508,29 @@ def show_resellers(message):
 
     # Construct a message showing all resellers and their balances
     resellers_info = "➖ 𝗔𝘂𝘁𝗵𝗼𝗿𝗶𝘀𝗲𝗱 𝗥𝗲𝘀𝗲𝗹𝗹𝗲𝗿𝘀 ✅\n\n"
-    if resellers:
+    
+    if resellers:  # Check if there are resellers
         for reseller_id, balance in resellers.items():
             try:
-                # Attempt to get the reseller's username
                 reseller_chat = bot.get_chat(reseller_id)
                 reseller_username = f"@{reseller_chat.username}" if reseller_chat.username else "Unknown"
             except Exception as e:
-                # Handle cases where the chat cannot be found
                 logging.error(f"Error fetching chat for reseller {reseller_id}: {e}")
                 reseller_username = "Unknown (Chat not found)"
 
             # Add reseller details to the message
             resellers_info += (
                 f"➖  *𝗨𝘀𝗲𝗿𝗻𝗮𝗺𝗲* : {reseller_username}\n"
-                f"➖  *𝗨𝘀𝗲𝗿𝗜𝗗* : {reseller_id}\n"
-                f"➖  *𝗖𝗨𝗥𝗥𝗘𝗡𝗧 𝗕𝗔𝗟𝗔𝗡𝗖𝗘* : {balance} Rs\n\n"
+                f"➖  *𝗨𝘀𝗲𝗿𝗜𝗗* : `{reseller_id}`\n"
+                f"➖  *𝗖𝗨𝗥𝗥𝗘𝗡𝗧 𝗕𝗔𝗟𝗔𝗡𝗖𝗘* : `{balance} Rs`\n\n"
             )
     else:
         resellers_info += " ➖ *𝗡𝗼 𝗥𝗲𝘀𝗲𝗹𝗹𝗲𝗿𝘀 𝗔𝘃𝗮𝗶𝗹𝗮𝗯𝗹𝗲*"
 
     # Send the resellers' information to the admin
-    bot.reply_to(message, resellers_info, parse_mode='Markdown')
+    bot.reply_to(message, resellers_info, parse_mode='Markdown')    
 
-       
+
 @bot.message_handler(commands=['addbalance'])
 def add_balance(message):
     user_id = str(message.chat.id)
