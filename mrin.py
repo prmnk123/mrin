@@ -497,6 +497,7 @@ def remove_user(message):
 
     bot.reply_to(message, response, parse_mode='Markdown')
 
+
 @bot.message_handler(commands=['resellers'])
 def show_resellers(message):
     # Ensure admin_id is a list or set
@@ -528,9 +529,9 @@ def show_resellers(message):
         resellers_info += " ➖ *𝗡𝗼 𝗥𝗲𝘀𝗲𝗹𝗹𝗲𝗿𝘀 𝗔𝘃𝗮𝗶𝗹𝗮𝗯𝗹𝗲*"
 
     # Send the resellers' information to the admin
-    bot.reply_to(message, resellers_info, parse_mode='Markdown')    
+    bot.reply_to(message, resellers_info, parse_mode='Markdown')
 
-
+   
 @bot.message_handler(commands=['addbalance'])
 def add_balance(message):
     user_id = str(message.chat.id)
